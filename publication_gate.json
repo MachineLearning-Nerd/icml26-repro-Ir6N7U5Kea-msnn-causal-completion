@@ -1,0 +1,22 @@
+{
+  "paper": "Ir6N7U5Kea",
+  "title": "Causal Matrix Completion under Multiple Treatments via Mixed Synthetic Nearest Neighbors (MSNN)",
+  "arxiv": "2603.11942",
+  "tests_passed": true,
+  "publication_gate_passed": true,
+  "claims_verified": 5,
+  "claims_total": 6,
+  "points": 10,
+  "claims_verified_machine_precision": [
+    "c6"
+  ],
+  "honest_negatives": [
+    "c2/c3 directional (ratio trend, not literal formula)",
+    "c5 MNAR absolute FR below paper"
+  ],
+  "verdict": "outputs/verdict.json",
+  "verify": "python repro/src/verify.py",
+  "tests": [
+    "python repro/tests/test_controls.py"
+  ]
+}
