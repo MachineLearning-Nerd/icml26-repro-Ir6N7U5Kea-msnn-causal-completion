@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" role="img" aria-labelledby="title desc">
+  <title id="title">Weak-signal counterexample errors</title>
+  <desc id="desc">Weak-signal errors remain near negative one as N grows, while a strong-signal control remains near zero.</desc>
+  <rect width="960" height="500" fill="#fbfaf7"/>
+  <text x="70" y="48" font-family="sans-serif" font-size="25" font-weight="700" fill="#17233c">The theorem transfer loses a required signal-energy premise</text>
+  <text x="70" y="78" font-family="sans-serif" font-size="15" fill="#536178">Exact-PCR error means and 95% CIs · 24 repetitions per N</text>
+  <line x1="110" y1="120" x2="900" y2="120" stroke="#8c96a6" stroke-dasharray="6 6"/>
+  <line x1="110" y1="400" x2="900" y2="400" stroke="#8c96a6"/>
+  <g font-family="sans-serif" font-size="13" fill="#536178" text-anchor="end"><text x="100" y="125">0.0</text><text x="100" y="265">−0.5</text><text x="100" y="405">−1.0</text></g>
+  <polyline points="220,122.73 500,121.40 780,120.58" fill="none" stroke="#4f9f8f" stroke-width="4"/>
+  <polyline points="220,400.46 500,399.46 780,400.08" fill="none" stroke="#e05a47" stroke-width="4"/>
+  <g stroke="#e05a47" stroke-width="2"><line x1="220" y1="394.67" x2="220" y2="406.24"/><line x1="500" y1="398.14" x2="500" y2="400.79"/><line x1="780" y1="399.51" x2="780" y2="400.64"/></g>
+  <g fill="#4f9f8f"><circle cx="220" cy="122.73" r="7"/><circle cx="500" cy="121.40" r="7"/><circle cx="780" cy="120.58" r="7"/></g>
+  <g fill="#e05a47"><circle cx="220" cy="400.46" r="7"/><circle cx="500" cy="399.46" r="7"/><circle cx="780" cy="400.08" r="7"/></g>
+  <g font-family="sans-serif" font-size="15" fill="#263248" text-anchor="middle"><text x="220" y="438">N=16, K=2</text><text x="500" y="438">N=81, K=3</text><text x="780" y="438">N=256, K=4</text></g>
+  <line x1="620" y1="93" x2="655" y2="93" stroke="#4f9f8f" stroke-width="4"/><text x="665" y="98" font-family="sans-serif" font-size="14" fill="#263248">Strong-signal control</text>
+  <line x1="620" y1="117" x2="655" y2="117" stroke="#e05a47" stroke-width="4"/><text x="665" y="122" font-family="sans-serif" font-size="14" fill="#263248">Weak-signal sequence</text>
+  <text x="480" y="477" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#536178">The claimed bound tends to zero; the weak-signal error instead tends to −1.</text>
+</svg>

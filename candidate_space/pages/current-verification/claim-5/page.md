@@ -73,10 +73,10 @@ The fixed command is:
 uv run --frozen python repro/src/verify.py && uv run --frozen python repro/tests/test_controls.py
 ```
 
-Formal run `afc2ec12-c40a-4402-8ed2-4bbb15e1f13f` used Git SHA
-`59feea01de004bbbfbc78f0755cf09f3be2def76` on HF `cpu-upgrade` (official
+Current evidence-freeze run `5f17a7bf-5a73-428c-8f3d-54cf844cd48d` used Git
+SHA `b99cefc0f99bf42b8397594b2e2de49d4c209014` on HF `cpu-upgrade` (official
 8 vCPU/32 GB; 64 logical CPUs visible). Claim 5 used one process and took
-0.279163 seconds; the cumulative run took 705 seconds.
+0.287237 seconds; the cumulative run took 688 seconds.
 
 - [Current source-certificate generator](../../../repro/claims/claim5_tables23/source_certificate.py)
 - [Current fail-closed verifier](../../../repro/claims/claim5_tables23/verifier.py)

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img" aria-labelledby="title desc">
+  <title id="title">Table 1 metric definition audit</title>
+  <desc id="desc">The paper label and released normalized MAE agree near 0.0391, while the paper-defined entrywise MRE is 0.2525.</desc>
+  <rect width="960" height="470" fill="#fbfaf7"/>
+  <text x="70" y="48" font-family="sans-serif" font-size="25" font-weight="700" fill="#17233c">Table 1 reproduces the number—but not the stated metric</text>
+  <text x="70" y="78" font-family="sans-serif" font-size="15" fill="#536178">Same predictions, two formulas · paper-scale 300×100, rank 3, seeds 0–9</text>
+  <line x1="120" y1="370" x2="880" y2="370" stroke="#8c96a6"/>
+  <line x1="120" y1="270" x2="880" y2="270" stroke="#d9dee7"/><line x1="120" y1="170" x2="880" y2="170" stroke="#d9dee7"/>
+  <g font-family="sans-serif" font-size="13" fill="#536178" text-anchor="end"><text x="110" y="375">0.0</text><text x="110" y="275">0.1</text><text x="110" y="175">0.2</text><text x="110" y="115">0.26</text></g>
+  <rect x="205" y="330.9" width="125" height="39.1" rx="4" fill="#65758b"/>
+  <rect x="420" y="330.91" width="125" height="39.09" rx="4" fill="#4f9f8f"/>
+  <rect x="635" y="117.52" width="125" height="252.48" rx="4" fill="#e05a47"/>
+  <g font-family="sans-serif" font-size="20" font-weight="700" text-anchor="middle"><text x="267.5" y="321" fill="#445064">0.0391</text><text x="482.5" y="321" fill="#37796d">0.0390857</text><text x="697.5" y="108" fill="#b13b2b">0.252483</text></g>
+  <g font-family="sans-serif" font-size="14" fill="#263248" text-anchor="middle">
+    <text x="267.5" y="397">Paper table label</text><text x="267.5" y="417">“MRE”</text>
+    <text x="482.5" y="397">Released code</text><text x="482.5" y="417">normalized MAE</text>
+    <text x="697.5" y="397">Section 5.1</text><text x="697.5" y="417">entrywise MRE</text>
+  </g>
+  <text x="480" y="453" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#536178">Observed feasible rate: 4.6893%, reproducing the paper’s 4.69%.</text>
+</svg>

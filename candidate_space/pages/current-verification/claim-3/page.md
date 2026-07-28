@@ -55,3 +55,8 @@ Remark 4.12 summarizes the dominant change as quadratic `rc` to linear `r`.
 The negative control changes only the sparse MSNN exponent. The independent
 checker exits 1 for the intended MSNN-ratio mismatch, and the cumulative fixed
 command fails if any evidence check is weakened.
+
+Formal run `92a2a72f-4845-4b14-b85a-f86549a0cded` used Git SHA
+`15488a94a06ac8a58213224b49014b1901efc7f3` and completed in 223 seconds on
+HF `cpu-upgrade` (8 vCPU/32 GB; 64 host logical CPUs visible). The exact
+certificate uses no stochastic seed.

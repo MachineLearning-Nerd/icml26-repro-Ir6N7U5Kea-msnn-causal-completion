@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "title": "MSNN Causal Completion",
+  "emoji": "🎯",
+  "space_id": "DineshAI/Ir6N7U5Kea",
+  "paper": "arXiv:2603.11942",
+  "tags": [
+    "icml2026-repro",
+    "paper-Ir6N7U5Kea"
+  ],
+  "updated_at": "2026-07-28T23:35:27+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Current verification",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "current-verification/claim-1",
+        "title": "Claim 1 — FALSIFIED",
+        "file": "pages/current-verification/claim-1/page.md",
+        "children": []
+      },
+      {
+        "slug": "current-verification/claim-2",
+        "title": "Claim 2 — VERIFIED",
+        "file": "pages/current-verification/claim-2/page.md",
+        "children": []
+      },
+      {
+        "slug": "current-verification/claim-3",
+        "title": "Claim 3 — VERIFIED",
+        "file": "pages/current-verification/claim-3/page.md",
+        "children": []
+      },
+      {
+        "slug": "current-verification/claim-4",
+        "title": "Claim 4 — FALSIFIED",
+        "file": "pages/current-verification/claim-4/page.md",
+        "children": []
+      },
+      {
+        "slug": "current-verification/claim-5",
+        "title": "Claim 5 — FALSIFIED",
+        "file": "pages/current-verification/claim-5/page.md",
+        "children": []
+      },
+      {
+        "slug": "current-verification/claim-6",
+        "title": "Claim 6 — VERIFIED",
+        "file": "pages/current-verification/claim-6/page.md",
+        "children": []
+      },
+      {
+        "slug": "release-report",
+        "title": "Release report and forecast",
+        "file": "pages/release-report/page.md",
+        "children": []
+      },
+      {
+        "slug": "release-audit",
+        "title": "Evaluator-blind release audit",
+        "file": "pages/release-audit/page.md",
+        "children": []
+      },
+      {
+        "slug": "executive-summary",
+        "title": "Historical rejected baseline",
+        "file": "pages/executive-summary/page.md",
+        "children": []
+      }
+    ]
+  },
+  "agent_view_tokens": 8000,
+  "revision": "candidate-claim-by-claim-20260728"
+}

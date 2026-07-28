@@ -28,3 +28,15 @@ Lexicographic sensitivity run:
 - same HF allocation and eight workers
 - Claim 4 generator runtime: 89.14188 seconds
 - formal cumulative run duration: 271 seconds
+
+Current strict evidence freeze:
+
+- run `3d5c38e8-0f54-4614-a1c8-22f25df79b42`
+- Git SHA `b88906567b8c0fa21c1f2b39fe5cc722adbef956`
+- pre-run estimate and process cap: 8 workers, one thread each
+- selected and actual allocation: HF `cpu-upgrade`, 8 vCPU / 32 GB
+- container-visible logical CPUs: 64
+- generator runtime: 571.115738 seconds
+- verifier runtime: 0.128842 seconds
+- cumulative wall time: 948 seconds (15m48s)
+- seeds: 0–9

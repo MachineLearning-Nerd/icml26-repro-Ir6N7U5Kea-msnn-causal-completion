@@ -17,3 +17,12 @@ container reported 64 visible host logical CPUs. Pre-run algorithm estimate
 was at most two CPU cores and seconds, but the cumulative runtime was uncertain.
 Measured generator runtime was 0.335675 seconds; full fixed command was 3m47s.
 Approximate compute charge at $0.03/hour: $0.0019.
+
+Current independent evidence freeze:
+
+- run `404fdc54-2c67-47e7-85ea-ddf4f21bcd5a`
+- Git SHA `b9bfbd9c7b51d91999a7ecd52a850acd98b68629`
+- cumulative wall time: 228 seconds (3m48s)
+- generator runtime: 0.343263 seconds
+- verifier plus independent reconstruction runtime: 0.864089 seconds
+- seeds: 0–9; actual allocation unchanged from above

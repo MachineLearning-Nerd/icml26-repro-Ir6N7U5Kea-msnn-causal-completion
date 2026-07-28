@@ -27,3 +27,13 @@ uv run --frozen python repro/src/verify.py && uv run --frozen python repro/tests
 The certificate is a one-process task, but the unchanged cumulative command
 also reruns multi-process and uncertain-runtime checks from Claims 1, 4, and 6;
 therefore the formal run used HF `cpu-upgrade`, not local CPU.
+
+Evaluator-visible cumulative freeze:
+
+- run `5f17a7bf-5a73-428c-8f3d-54cf844cd48d`
+- Git SHA `b99cefc0f99bf42b8397594b2e2de49d4c209014`
+- cumulative wall time: 688 seconds (11m28s)
+- certificate runtime: 0.287237 seconds
+- verifier runtime: 0.156670 seconds
+- actual allocation: HF `cpu-upgrade`, 8 vCPU / 32 GB; 64 logical host CPUs
+  visible; Claim 5 used one process

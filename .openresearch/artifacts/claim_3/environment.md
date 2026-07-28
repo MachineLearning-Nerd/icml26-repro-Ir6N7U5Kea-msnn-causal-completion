@@ -9,3 +9,15 @@ Python `3.12.*`, NumPy `2.5.1`, committed `uv.lock`, and pinned image
 
 The verifier prints Git SHA, visible logical CPU count, platform, exact-symbolic
 seed declaration, and measured verifier runtime to the captured run log.
+
+Formal run provenance:
+
+- run `92a2a72f-4845-4b14-b85a-f86549a0cded`
+- Git SHA `15488a94a06ac8a58213224b49014b1901efc7f3`
+- pre-run core estimate: one core for this symbolic certificate, but uncertain
+  cumulative-suite runtime
+- selected and actual allocation: HF `cpu-upgrade`, 8 vCPU / 32 GB
+- container-visible logical CPUs: 64
+- verifier runtime: 0.074451 seconds
+- cumulative wall time: 223 seconds (3m43s)
+- deterministic seed: `none_exact_symbolic`

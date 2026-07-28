@@ -63,9 +63,9 @@ The fixed command is:
 uv run --frozen python repro/src/verify.py && uv run --frozen python repro/tests/test_controls.py
 ```
 
-Formal run `78bb18c2-0c2a-4731-b79a-e0a625546591` used Git SHA
-`4b4d33eba37072eb85d738a8ecf91282c9331888` on HF `cpu-upgrade` (officially
+Current evidence-freeze run `4498c980-5971-49b7-a9d9-dfd452ff2241` used Git
+SHA `b01cf6ff3166e5e0ed72f876614e1a4d3f5cb3dc` on HF `cpu-upgrade` (officially
 8 vCPU/32 GB; 64 logical CPUs container-visible), with eight worker processes.
-It completed the cumulative suite in 667 seconds. The checker passed; the
+It completed the cumulative suite in 758 seconds. The checker passed; the
 false energy-premise mutation exited nonzero for exactly the intended exponent
 mismatch.

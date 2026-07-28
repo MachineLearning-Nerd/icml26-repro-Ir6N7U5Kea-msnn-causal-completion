@@ -63,8 +63,9 @@ The fixed command is:
 uv run --frozen python repro/src/verify.py && uv run --frozen python repro/tests/test_controls.py
 ```
 
-The formal NetworkX route ran at Git SHA
-`159ad67c5bcfd5cc26af91f9dd165140fce99ca7` on HF `cpu-upgrade` (officially
-8 vCPU/32 GB; 64 logical CPUs container-visible), using exactly eight workers.
-The Claim 4 generator took 875.271385 seconds; the cumulative run took 1,933
-seconds.
+The current strict freeze run `3d5c38e8-0f54-4614-a1c8-22f25df79b42` used Git
+SHA `b88906567b8c0fa21c1f2b39fe5cc722adbef956` on HF `cpu-upgrade`
+(officially 8 vCPU/32 GB; 64 logical CPUs container-visible), using exactly
+eight workers. Its Claim 4 generator took 571.115738 seconds; the cumulative
+run took 948 seconds. The earlier NetworkX-order sensitivity route remains
+documented in the linked environment.

@@ -36,3 +36,11 @@ Compute decision and actual allocation:
 
 The local machine performed only short one-core syntax, JSON, extraction, and
 smoke checks. It did not run the formal multi-process experiment.
+
+Evaluator-visible freeze run:
+
+- run `4498c980-5971-49b7-a9d9-dfd452ff2241`
+- Git SHA `b01cf6ff3166e5e0ed72f876614e1a4d3f5cb3dc`
+- cumulative wall time 758 seconds (12m38s)
+- generator runtime 0.652824 seconds; verifier runtime 0.119444 seconds
+- actual allocation and seed rule unchanged from above

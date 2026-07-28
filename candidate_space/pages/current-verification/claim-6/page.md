@@ -49,3 +49,9 @@ matrices, exact bicliques, weighted SVD estimates, and aggregates. Its mutation
 selects treatment-2 anchor rows for a treatment-1 target and must exit nonzero
 with the target-treatment invariant diagnosis. Every cumulative run regenerates
 both results.
+
+Current evidence-freeze run `404fdc54-2c67-47e7-85ea-ddf4f21bcd5a` used Git
+SHA `b9bfbd9c7b51d91999a7ecd52a850acd98b68629` and completed in 228 seconds on
+HF `cpu-upgrade` (8 vCPU/32 GB; 64 host logical CPUs visible). The generator
+used seeds 0–9; generation took 0.343263 seconds and the verifier plus
+independent reconstruction took 0.864089 seconds.

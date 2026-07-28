@@ -54,3 +54,8 @@ The negative control changes one exponent in the SNN term. The independent
 checker exits 1 with the intended exponent-mismatch diagnosis. The cumulative
 fixed command exits nonzero if the certificate, checker, raw result, or control
 is altered.
+
+Formal run `6411f20e-e068-4a91-a309-6fa6c59e3d6a` used Git SHA
+`8e4d33cb954fa5f647008e7c9a4db81a68d32731` and completed in 271 seconds on
+HF `cpu-upgrade` (8 vCPU/32 GB; 64 host logical CPUs visible). The exact
+certificate uses no stochastic seed.
