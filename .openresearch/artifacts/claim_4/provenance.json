@@ -1,0 +1,23 @@
+{
+  "actual_cpu_allocation": "HF cpu-upgrade: 8 vCPU, 32 GB",
+  "formal_run_duration_seconds": 1933,
+  "git_sha": "159ad67c5bcfd5cc26af91f9dd165140fce99ca7",
+  "logical_cpu_count_visible": 64,
+  "platform": "Linux-6.12.90-120.164.amzn2023.x86_64-x86_64-with-glibc2.36",
+  "process_workers": 8,
+  "runtime_seconds": 875.271385,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "source_experiment_id": "88f8524d-99b3-4fb4-a39c-2cddcf67271b",
+  "source_run_id": "ac16ab19-ebe2-4d47-a37b-168d79ec7851"
+}

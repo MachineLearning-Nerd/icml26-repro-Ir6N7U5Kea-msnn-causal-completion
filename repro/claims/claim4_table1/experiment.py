@@ -277,10 +277,10 @@ def estimate(
     row: int,
     column: int,
     mixed: bool,
-) -> tuple[float, bool, tuple[int, int] | None]:
+) -> tuple[float, bool, tuple[int, int] | None, bool]:
     selected = anchors(design, row, column, mixed)
     if selected is None:
-        return float("nan"), False, None
+        return float("nan"), False, None, True
     selected_rows, selected_columns = selected
     if mixed:
         column_scales = np.array(
@@ -305,9 +305,28 @@ def estimate(
     feasible = train_error <= EPSILON and subspace_error <= EPSILON
     if not mixed and selected_rows.size == selected_columns.size == 1:
         feasible = False
-    return prediction, bool(feasible), (
-        int(selected_rows.size),
-        int(selected_columns.size),
+    invariant_ok = bool(
+        np.all(design[selected_rows, column] == 1)
+        and (
+            np.all(
+                design[np.ix_(selected_rows, selected_columns)]
+                == design[row, selected_columns][None, :]
+            )
+            and np.all(design[row, selected_columns] != 0)
+            if mixed
+            else (
+                np.all(design[row, selected_columns] == 1)
+                and np.all(
+                    design[np.ix_(selected_rows, selected_columns)] == 1
+                )
+            )
+        )
+    )
+    return (
+        prediction,
+        bool(feasible),
+        (int(selected_rows.size), int(selected_columns.size)),
+        invariant_ok,
     )
 
 
@@ -352,13 +371,13 @@ def run_method(
     invariant_failures = 0
     for row in range(M):
         for column in range(N):
-            prediction, feasible, shape = estimate(
+            prediction, feasible, shape, invariant_ok = estimate(
                 design, observed, row, column, mixed
             )
             if shape is not None:
                 anchor_rows.append(shape[0])
                 anchor_columns.append(shape[1])
-            if not audit_selected_edges(design, row, column, mixed):
+            if not invariant_ok:
                 invariant_failures += 1
             if not feasible:
                 continue
@@ -377,6 +396,7 @@ def run_method(
         "code_normalized_mae": (
             float(np.mean(normalized_errors)) if normalized_errors else None
         ),
+        "normalized_absolute_error_sum": float(np.sum(normalized_errors)),
         "feasible_count": feasible_count,
         "feasible_rate_percent": 100 * feasible_count / (M * N),
         "invariant_failures": invariant_failures,
@@ -384,6 +404,9 @@ def run_method(
             float(np.mean(entrywise_relative_errors))
             if entrywise_relative_errors
             else None
+        ),
+        "entrywise_relative_error_sum": float(
+            np.sum(entrywise_relative_errors)
         ),
     }
 
@@ -475,10 +498,16 @@ def solver_order_control() -> dict:
 
 def aggregate(records: list[dict], method: str, metric: str) -> dict:
     values = np.array([record[method][metric] for record in records], dtype=float)
+    finite = values[np.isfinite(values)]
     return {
-        "mean": float(np.mean(values)),
-        "sample_std": float(np.std(values, ddof=1)),
-        "values": [float(value) for value in values],
+        "finite_count": int(finite.size),
+        "mean": float(np.mean(finite)) if finite.size else None,
+        "sample_std": (
+            float(np.std(finite, ddof=1)) if finite.size > 1 else None
+        ),
+        "values": [
+            float(value) if np.isfinite(value) else None for value in values
+        ],
     }
 
 
@@ -543,8 +572,24 @@ def main() -> int:
         "runtime_seconds": round(time.perf_counter() - started, 6),
         "seeds": list(SEEDS),
     }
-    print(f"CLAIM_4_RAW_JSON={json.dumps(result, sort_keys=True)}")
-    print(f"CLAIM_4_PROVENANCE={json.dumps(provenance, sort_keys=True)}")
+    artifact = ROOT / ".openresearch" / "artifacts" / "claim_4"
+    artifact.mkdir(parents=True, exist_ok=True)
+    raw_json = json.dumps(
+        result, allow_nan=False, indent=2, sort_keys=True
+    ) + "\n"
+    provenance_json = json.dumps(
+        provenance, allow_nan=False, indent=2, sort_keys=True
+    ) + "\n"
+    (artifact / "raw_result.json").write_text(raw_json)
+    (artifact / "provenance.json").write_text(provenance_json)
+    print(
+        "CLAIM_4_RAW_JSON="
+        + json.dumps(result, allow_nan=False, sort_keys=True)
+    )
+    print(
+        "CLAIM_4_PROVENANCE="
+        + json.dumps(provenance, allow_nan=False, sort_keys=True)
+    )
     if not control["passed"]:
         print("CLAIM_4_GENERATOR_FAILED: finite solver control")
         return 1

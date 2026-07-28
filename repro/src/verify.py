@@ -267,3 +267,11 @@ if __name__ == "__main__":
         "experiment.py",
     )
     subprocess.run([sys.executable, claim_4_generator], check=True)
+    claim_4_verifier = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim4_table1",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_4_verifier], check=True)
