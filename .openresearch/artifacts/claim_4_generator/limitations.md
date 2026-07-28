@@ -1,8 +1,9 @@
 # Claim 4 generator limitations
 
-- Equal-score maximal-biclique tie order is unspecified by NetworkX and therefore
-  cannot be reconstructed portably. The clean-room solver uses a disclosed
-  deterministic tie rule while exactly matching the released objective.
+- Equal-score maximal-clique order is documented by NetworkX as arbitrary. The
+  current route transcribes NetworkX 3.6.1 exactly and pins its source hash;
+  the parent route used a lexicographic tie rule. Agreement across both routes
+  is stronger than relying on one unspecified order.
 - The author's dependency file is unpinned. The locked reproduction environment
   is intentionally not changed; only NumPy is used.
 - This generator makes no pass/fail claim about the paper numbers. It emits both

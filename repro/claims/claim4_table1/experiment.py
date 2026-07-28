@@ -59,7 +59,9 @@ def author_dgp(seed: int) -> tuple[dict[int, np.ndarray], np.ndarray, np.ndarray
     return potential, design, observed
 
 
-def max_balanced_biclique(edges: np.ndarray) -> tuple[np.ndarray, np.ndarray] | None:
+def max_balanced_biclique_lexicographic(
+    edges: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray] | None:
     """Exact objective used by the released code, with an explicit tie rule.
 
     The author implementation enumerates maximal cliques and maximizes
@@ -106,6 +108,100 @@ def max_balanced_biclique(edges: np.ndarray) -> tuple[np.ndarray, np.ndarray] | 
         ),
     )
     return np.array(chosen[0], dtype=int), np.array(chosen[1], dtype=int)
+
+
+def networkx_compatible_find_cliques(
+    adjacency: dict[int, set[int]],
+):
+    """Dependency-free transcription of NetworkX 3.6.1 ``find_cliques``.
+
+    NetworkX is BSD-3-Clause licensed. The pinned upstream clique.py SHA-256 is
+    480bce4406d9ad9f88a5356e11c6ab11342284d7acfa0969362aa867b8448273.
+    """
+
+    if not adjacency:
+        return
+    neighbors = {
+        node: {other for other in adjacency[node] if other != node}
+        for node in adjacency
+    }
+    clique: list[int | None] = []
+    candidates = set(adjacency)
+    subgraph = candidates.copy()
+    stack = []
+    clique.append(None)
+    pivot = max(
+        subgraph,
+        key=lambda node: len(candidates & neighbors[node]),
+    )
+    extensions = candidates - neighbors[pivot]
+    try:
+        while True:
+            if extensions:
+                chosen = extensions.pop()
+                candidates.remove(chosen)
+                clique[-1] = chosen
+                chosen_neighbors = neighbors[chosen]
+                child_subgraph = subgraph & chosen_neighbors
+                if not child_subgraph:
+                    yield [int(value) for value in clique if value is not None]
+                else:
+                    child_candidates = candidates & chosen_neighbors
+                    if child_candidates:
+                        stack.append((subgraph, candidates, extensions))
+                        clique.append(None)
+                        subgraph = child_subgraph
+                        candidates = child_candidates
+                        pivot = max(
+                            subgraph,
+                            key=lambda node: len(candidates & neighbors[node]),
+                        )
+                        extensions = candidates - neighbors[pivot]
+            else:
+                clique.pop()
+                subgraph, candidates, extensions = stack.pop()
+    except IndexError:
+        return
+
+
+def max_balanced_biclique(edges: np.ndarray) -> tuple[np.ndarray, np.ndarray] | None:
+    """Replicate the public author code's NetworkX clique order and score."""
+
+    row_count, column_count = edges.shape
+    if row_count == 0 or column_count == 0:
+        return None
+    node_count = row_count + column_count
+    adjacency: dict[int, set[int]] = {
+        node: set() for node in range(node_count)
+    }
+    for left in range(row_count):
+        adjacency[left].update(
+            right for right in range(row_count) if right != left
+        )
+    for left in range(column_count):
+        node = row_count + left
+        adjacency[node].update(
+            row_count + right
+            for right in range(column_count)
+            if right != left
+        )
+    for row in range(row_count):
+        for column in np.flatnonzero(edges[row]):
+            column_node = row_count + int(column)
+            adjacency[row].add(column_node)
+            adjacency[column_node].add(row)
+
+    best_score = 0
+    best = None
+    for clique in networkx_compatible_find_cliques(adjacency):
+        values = np.sort(np.array(clique, dtype=int))
+        rows = values[values < row_count]
+        columns = values[values >= row_count] - row_count
+        score = min(rows.size, columns.size)
+        if score > best_score:
+            best_score = int(score)
+            best = (rows, columns)
+    return best
 
 
 def universal_rank(singular: np.ndarray, rows: int, columns: int) -> int:
@@ -341,6 +437,42 @@ def exhaustive_solver_control() -> dict:
     return {"cases": cases, "passed": True}
 
 
+def solver_order_control() -> dict:
+    """Show the NetworkX-order solver and lexicographic solver share an objective."""
+
+    random = np.random.default_rng(12345)
+    cases = 0
+    tie_differences = 0
+    for row_count in range(1, 7):
+        for column_count in range(1, 9):
+            for _ in range(20):
+                edges = random.random((row_count, column_count)) < 0.5
+                if not np.any(edges):
+                    continue
+                cases += 1
+                ordered = max_balanced_biclique(edges)
+                lexicographic = max_balanced_biclique_lexicographic(edges)
+                if ordered is None or lexicographic is None:
+                    return {"cases": cases, "passed": False}
+                ordered_score = min(ordered[0].size, ordered[1].size)
+                lexicographic_score = min(
+                    lexicographic[0].size, lexicographic[1].size
+                )
+                if ordered_score != lexicographic_score:
+                    return {"cases": cases, "passed": False}
+                tie_differences += int(
+                    not (
+                        np.array_equal(ordered[0], lexicographic[0])
+                        and np.array_equal(ordered[1], lexicographic[1])
+                    )
+                )
+    return {
+        "cases": cases,
+        "different_equal_score_choices": tie_differences,
+        "passed": True,
+    }
+
+
 def aggregate(records: list[dict], method: str, metric: str) -> dict:
     values = np.array([record[method][metric] for record in records], dtype=float)
     return {
@@ -353,6 +485,7 @@ def aggregate(records: list[dict], method: str, metric: str) -> dict:
 def main() -> int:
     started = time.perf_counter()
     control = exhaustive_solver_control()
+    order_control = solver_order_control()
     with ProcessPoolExecutor(max_workers=8) as executor:
         records = list(executor.map(run_seed, SEEDS))
     records.sort(key=lambda item: item["seed"])
@@ -397,6 +530,7 @@ def main() -> int:
         },
         "per_seed": records,
         "solver_control": control,
+        "solver_order_control": order_control,
     }
     provenance = {
         "actual_cpu_allocation": "HF cpu-upgrade: 8 vCPU, 32 GB",
@@ -413,6 +547,9 @@ def main() -> int:
     print(f"CLAIM_4_PROVENANCE={json.dumps(provenance, sort_keys=True)}")
     if not control["passed"]:
         print("CLAIM_4_GENERATOR_FAILED: finite solver control")
+        return 1
+    if not order_control["passed"]:
+        print("CLAIM_4_GENERATOR_FAILED: solver-order control")
         return 1
     if any(
         record[method]["invariant_failures"]
