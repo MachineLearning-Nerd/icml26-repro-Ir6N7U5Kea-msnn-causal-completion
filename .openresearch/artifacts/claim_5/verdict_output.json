@@ -1,0 +1,17 @@
+{
+  "claim_id": "claim_5",
+  "evidence_type": "pinned primary-source Tables 2-3 certificate, independent range/ratio checker, metric-definition witness, and full ten-seed Appendix-B assignment-proportion audit",
+  "negative_control_exit_codes": {
+    "metric_substitution": 1,
+    "source_range": 1
+  },
+  "source_table_falsification": {
+    "error_ratios_outside_2_to_3": 3,
+    "msnn_fr_actual_range_percent": [
+      3.13,
+      54.16
+    ],
+    "snn_fr_actual_max_percent": 22.66
+  },
+  "verdict": "FALSIFIED"
+}

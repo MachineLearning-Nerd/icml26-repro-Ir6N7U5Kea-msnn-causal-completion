@@ -1,0 +1,12 @@
+{
+  "assignment_records_reconstructed": 20,
+  "checker": "independent_claim_5_source_certificate_checker",
+  "errors": [
+    "source audit mismatch: msnn_fr_max_percent",
+    "source audit mismatch: snn_fr_max_percent"
+  ],
+  "metric_mutation": false,
+  "passed": false,
+  "source_mutation": true,
+  "strict_json": true
+}
