@@ -1,0 +1,22 @@
+{
+  "acceptance": {
+    "all_30000_targets_per_cell": true,
+    "both_error_formulas_computed": true,
+    "deterministic_seeds_0_through_9": true,
+    "independent_aggregate_checker": true,
+    "metric_substitution_control_exits_nonzero": true,
+    "paper_assignment_proportions_reproduced": true,
+    "paper_scale_300_by_100_rank_3": true,
+    "source_range_control_exits_nonzero": true,
+    "strict_json": true
+  },
+  "claim_id": "claim_5",
+  "exact_claim": "Across MNAR Tables 2-3, MSNN consistently attains 3-26% feasible rates versus under 5% for SNN, with 2-3x error reductions across treatment levels.",
+  "falsification_rule": "The conjunction is FALSIFIED if the pinned paper tables themselves contain MSNN feasible rates above 26%, SNN feasible rates above 5%, or SNN/MSNN values labeled MRE outside the closed 2x-to-3x interval. The metric portion is independently falsified if the table values reproduce under released-code normalized MAE but not under Section 5.1's per-entry relative-error formula.",
+  "non_circularity": "Dimensions, rank, two lambda values, three treatments, ten seeds, all-entry target set, noise, PCR threshold, feasibility thresholds, paper absolute-entry DGP, and both metric formulas were pinned from the paper and source before formal output. The assignment-proportion calibration tested competing source interpretations without running the imputation outcome.",
+  "pre_run_source_status": "FALSIFICATION_CANDIDATE",
+  "source": {
+    "paper_html_sha256": "f2c8f7a37e8ade697a3ec605688a7a99b84bac4638385e1d1cb7f3dd93d18448",
+    "section_anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S5.SS1"
+  }
+}
