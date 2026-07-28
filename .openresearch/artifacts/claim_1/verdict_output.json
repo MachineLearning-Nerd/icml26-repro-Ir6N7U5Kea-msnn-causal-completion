@@ -1,0 +1,11 @@
+{
+  "claim_id": "claim_1",
+  "counterexample": {
+    "finite_bound_rhs_exponent": "-1/8 up to logarithms",
+    "limiting_estimation_error": "-1 in probability",
+    "normality_statistic": "-N^(1/8)/sigma in probability"
+  },
+  "evidence_type": "assumption-satisfying asymptotic counterexample certificate plus exact Algorithm 2 calibration",
+  "negative_control_exit_code": 1,
+  "verdict": "FALSIFIED"
+}

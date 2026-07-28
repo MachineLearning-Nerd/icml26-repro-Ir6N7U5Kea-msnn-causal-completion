@@ -1,0 +1,23 @@
+{
+  "acceptance": {
+    "all_msnn_assumptions_audited": true,
+    "asymptotic_exponents_reconstructed_independently": true,
+    "cited_snn_energy_premise_pinned": true,
+    "exact_algorithm_2_calibration": true,
+    "fixed_protocol": true,
+    "independent_checker_passes": true,
+    "negative_control_exits_nonzero": true,
+    "strict_json": true
+  },
+  "claim_id": "claim_1",
+  "exact_claim": "Theorem 4.5 transfers SNN's entry-wise finite-sample bound to MSNN under Assumptions 2.1 through 4.3, and Theorem 4.6 gives the displayed asymptotic N(0,1) limit under its four additional side conditions; Remark 4.7 says both have the same form as SNN after replacing AR/AC by MAR/MAC.",
+  "falsification_rule": "FALSIFIED if one explicit asymptotic sequence satisfies the coherent intended MSNN assumptions and every displayed theorem side condition, but the Theorem 4.5 right-hand side tends to zero while the estimation error does not, and the Theorem 4.6 standardized statistic does not converge to N(0,1).",
+  "non_circularity": "The sequence is analytical and fixed before calibration: N=t^4, K=t, rank one, anchor loading N^-1, donor-row factors (1,N^-2,...,N^-2), target loadings one, and fixed Gaussian noise. No sample size, tolerance, or horizon was selected from an observed fit.",
+  "source": {
+    "paper_html_sha256": "f2c8f7a37e8ade697a3ec605688a7a99b84bac4638385e1d1cb7f3dd93d18448",
+    "section_anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S4.SS2",
+    "theorem_4_5_anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S4.Thmtheorem5",
+    "theorem_4_6_anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S4.Thmtheorem6"
+  },
+  "verdict": "FALSIFIED"
+}
