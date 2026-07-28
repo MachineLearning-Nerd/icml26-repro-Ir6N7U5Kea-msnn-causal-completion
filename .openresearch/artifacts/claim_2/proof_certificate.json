@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "source": {
+    "anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S4.Thmtheorem10",
+    "retrieved_utc_date": "2026-07-28",
+    "sha256": "f2c8f7a37e8ade697a3ec605688a7a99b84bac4638385e1d1cb7f3dd93d18448",
+    "url": "https://ar5iv.labs.arxiv.org/html/2603.11942"
+  },
+  "theorem_4_8_leading_terms": {
+    "common_factor": "binom(m-1,r)*binom(n-1,c)",
+    "msnn": {
+      "expression": "common*gamma^c*p_d^r*p_max^((r+1)c)",
+      "exponents": {
+        "gamma": {
+          "c": 1
+        },
+        "p_d": {
+          "r": 1
+        },
+        "p_max": {
+          "c": 1,
+          "r*c": 1
+        }
+      }
+    },
+    "snn": {
+      "expression": "common*p_d^(rc+r+c)",
+      "exponents": {
+        "gamma": {},
+        "p_d": {
+          "c": 1,
+          "r": 1,
+          "r*c": 1
+        },
+        "p_max": {}
+      }
+    }
+  },
+  "definitions": {
+    "gamma": "sum_d'(p_d'/p_max)^(r+1)",
+    "p_max": "max_d' p_d'"
+  },
+  "corollary_4_10_ratio": {
+    "expression": "[sum_d'(p_d'/p_d)^(r+1)]^c",
+    "exponents": {
+      "gamma": {
+        "c": 1
+      },
+      "p_d": {
+        "c": -1,
+        "r*c": -1
+      },
+      "p_max": {
+        "c": 1,
+        "r*c": 1
+      }
+    }
+  },
+  "asymptotic_rule": "(1-o(1))/(1-o(1)) = 1+o(1)"
+}

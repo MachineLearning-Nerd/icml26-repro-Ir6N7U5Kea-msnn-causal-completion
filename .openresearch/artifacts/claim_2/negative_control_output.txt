@@ -1,0 +1,1 @@
+{"checker": "independent_laurent_monomial_checker", "checks": 4, "errors": ["derived exponent vector does not match the claimed ratio"], "mutation": true, "passed": false}

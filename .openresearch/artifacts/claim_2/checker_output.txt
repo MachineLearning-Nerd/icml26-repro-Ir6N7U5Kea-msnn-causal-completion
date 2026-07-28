@@ -1,0 +1,1 @@
+{"checker": "independent_laurent_monomial_checker", "checks": 4, "errors": [], "mutation": false, "passed": true}

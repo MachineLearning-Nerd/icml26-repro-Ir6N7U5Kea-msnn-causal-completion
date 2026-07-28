@@ -1,0 +1,22 @@
+{
+  "claim_id": "claim_2",
+  "paper_location": {
+    "anchor": "S4.Thmtheorem10",
+    "section": "4.3.1",
+    "title": "Corollary 4.10"
+  },
+  "statement": "Under the setting of Theorem 4.8, for estimation of entry (i,j) at treatment level d, E[K_MSNN(d)]/E[K_SNN(d)] = (1+o(1))*[sum_{d' in L}(p_{d'}/p_d)^(r+1)]^c.",
+  "quantifiers": [
+    "any entry (i,j)",
+    "any treatment d with p_d > 0",
+    "fixed positive integer anchor sizes r and c",
+    "MCAR assignments satisfying both sparsity limits in Theorem 4.8"
+  ],
+  "acceptance": [
+    "derive the exponent vector by exact division of the two Theorem 4.8 leading terms",
+    "independent checker reproduces the symbolic identity and an exact-rational substitution",
+    "checker rejects a one-exponent mutation with nonzero exit status",
+    "paper source URL, retrieval date, SHA-256, assumptions, and quantifiers are recorded"
+  ],
+  "verdict_rule": "VERIFIED only if every acceptance condition passes; otherwise verifier exits nonzero"
+}

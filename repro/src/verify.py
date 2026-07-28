@@ -226,3 +226,12 @@ def main():
 
 if __name__ == "__main__":
     main()
+    import subprocess
+    claim_2 = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim2_cor410",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_2], check=True)

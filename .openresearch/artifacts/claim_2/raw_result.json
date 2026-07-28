@@ -1,0 +1,7 @@
+{
+  "claim_id": "claim_2",
+  "evidence_type": "exact symbolic certificate plus independent checker",
+  "identity": "E[K_MSNN(d)]/E[K_SNN(d)] = (1+o(1))*[sum_d'(p_d'/p_d)^(r+1)]^c",
+  "negative_control_exit_code": 1,
+  "verdict": "VERIFIED"
+}
