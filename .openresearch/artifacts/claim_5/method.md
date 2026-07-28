@@ -13,10 +13,19 @@ nonnegative. The legacy RNG also consumes the unused `not_observed` potential
 and noise draws in the author's dictionary order.
 
 The estimator reuses the exact, dependency-free NetworkX 3.6.1 maximal-clique
-traversal and PCR implementation validated for Claim 4. It implements the
-author's strict score-improvement tie behavior, universal singular-value
-threshold, two squared 0.1 feasibility tests, and SNN 1×1 exclusion. For
-MSNN, mixed columns are divided by their treatment scales before PCR.
+traversal and PCR implementation validated for Claim 4. The balanced-biclique
+objective is first certified by a pruned row-set search. The unchanged
+author-order traversal then prunes only branches whose remaining row/column
+candidates cannot attain that certified score and returns the first optimum.
+This is not a heuristic: the cumulative run exhaustively checks all 673
+nonempty binary matrices through 3×3 and requires exact selected-index
+agreement with full author-order enumeration on 927 seeded matrices,
+including equal-score tie cases.
+
+The estimator implements the author's strict score-improvement tie behavior,
+universal singular-value threshold, two squared 0.1 feasibility tests, and
+SNN 1×1 exclusion. For MSNN, mixed columns are divided by their treatment
+scales before PCR.
 
 Every feasible prediction contributes to both:
 
@@ -34,8 +43,9 @@ Controls:
 
 - all 673 nonzero binary matrices through 3×3 exhaustively verify the clique
   objective;
-- a 927-case deterministic suite compares the NetworkX-order and
-  lexicographic solvers;
+- a 927-case deterministic suite requires exact selected-index agreement
+  between the optimized and full NetworkX-order traversals, while separately
+  recording lexicographic equal-score differences;
 - every selected edge is audited against the treatment design;
 - a metric mutation substitutes normalized MAE for the paper's formula and
   must exit nonzero;

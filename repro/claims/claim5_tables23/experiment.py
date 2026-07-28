@@ -520,6 +520,11 @@ def main() -> int:
         "assignment_proportion_aggregates": assignment_aggregates(records),
         "claim_id": "claim_5_generator",
         "config": {
+            "clique_solver": (
+                "exact NetworkX-compatible author order; independently "
+                "certify the optimum score, prune only branches unable to "
+                "attain it, and stop at the first optimum"
+            ),
             "dgp": "paper Appendix B: absolute value of each ground-truth entry",
             "feasibility_epsilons": [EPSILON, EPSILON],
             "lambdas": list(LAMBDAS),
@@ -557,6 +562,13 @@ def main() -> int:
         "process_workers": WORKERS,
         "runtime_seconds": round(time.perf_counter() - started, 6),
         "seeds": list(SEEDS),
+        "solver_regression_controls": {
+            "exhaustive_objective_cases": solver_control["cases"],
+            "exact_author_order_cases": order_control["cases"],
+            "exact_author_order_match": order_control[
+                "exact_author_order_match"
+            ],
+        },
     }
     artifact = ROOT / ".openresearch" / "artifacts" / "claim_5"
     artifact.mkdir(parents=True, exist_ok=True)

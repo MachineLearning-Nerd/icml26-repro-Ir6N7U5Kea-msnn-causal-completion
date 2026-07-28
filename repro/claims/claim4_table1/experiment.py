@@ -164,8 +164,136 @@ def networkx_compatible_find_cliques(
         return
 
 
-def max_balanced_biclique(edges: np.ndarray) -> tuple[np.ndarray, np.ndarray] | None:
-    """Replicate the public author code's NetworkX clique order and score."""
+def first_clique_with_balanced_score(
+    adjacency: dict[int, set[int]],
+    row_count: int,
+    target_score: int,
+) -> list[int] | None:
+    """Return the first author-order clique attaining a certified score.
+
+    This is the same iterative Bron--Kerbosch traversal as
+    :func:`networkx_compatible_find_cliques`.  A branch is omitted only when
+    the current clique plus every remaining candidate cannot contain
+    ``target_score`` nodes from both bipartite sides.
+    """
+
+    if not adjacency:
+        return None
+    neighbors = {
+        node: {other for other in adjacency[node] if other != node}
+        for node in adjacency
+    }
+    clique: list[int | None] = [None]
+    candidates = set(adjacency)
+    subgraph = candidates.copy()
+    stack = []
+    pivot = max(
+        subgraph,
+        key=lambda node: len(candidates & neighbors[node]),
+    )
+    extensions = candidates - neighbors[pivot]
+    try:
+        while True:
+            if extensions:
+                chosen = extensions.pop()
+                candidates.remove(chosen)
+                clique[-1] = chosen
+                chosen_neighbors = neighbors[chosen]
+                child_subgraph = subgraph & chosen_neighbors
+                if not child_subgraph:
+                    rows = sum(
+                        value is not None and value < row_count
+                        for value in clique
+                    )
+                    columns = len(clique) - rows
+                    if min(rows, columns) == target_score:
+                        return [
+                            int(value)
+                            for value in clique
+                            if value is not None
+                        ]
+                else:
+                    child_candidates = candidates & chosen_neighbors
+                    if child_candidates:
+                        current_rows = sum(
+                            value is not None and value < row_count
+                            for value in clique
+                        )
+                        current_columns = len(clique) - current_rows
+                        possible_rows = current_rows + sum(
+                            node < row_count for node in child_candidates
+                        )
+                        possible_columns = current_columns + sum(
+                            node >= row_count for node in child_candidates
+                        )
+                        if (
+                            min(possible_rows, possible_columns)
+                            >= target_score
+                        ):
+                            stack.append(
+                                (subgraph, candidates, extensions)
+                            )
+                            clique.append(None)
+                            subgraph = child_subgraph
+                            candidates = child_candidates
+                            pivot = max(
+                                subgraph,
+                                key=lambda node: len(
+                                    candidates & neighbors[node]
+                                ),
+                            )
+                            extensions = candidates - neighbors[pivot]
+            else:
+                clique.pop()
+                subgraph, candidates, extensions = stack.pop()
+    except IndexError:
+        return None
+
+
+def balanced_biclique_optimum_score(edges: np.ndarray) -> int:
+    """Find the exact objective with a pruned row-set search.
+
+    A row set can attain score ``k`` exactly when it contains at least ``k``
+    rows with at least ``k`` common adjacent columns.  Row sets whose common
+    column count is already smaller than their size can never become feasible
+    again after extension, so they are safely pruned.  Integer column masks
+    keep this certificate inexpensive in the paper's sparse treatment graphs.
+    """
+
+    row_count, column_count = edges.shape
+    if row_count == 0 or column_count == 0 or not np.any(edges):
+        return 0
+    if np.all(edges):
+        return min(row_count, column_count)
+
+    masks = [
+        sum(1 << int(column) for column in np.flatnonzero(edges[row]))
+        for row in range(row_count)
+    ]
+    frontier = [
+        ((row,), masks[row])
+        for row in range(row_count)
+        if masks[row]
+    ]
+    optimum = 1
+    for size in range(2, min(row_count, column_count) + 1):
+        extended: list[tuple[tuple[int, ...], int]] = []
+        for rows, common_mask in frontier:
+            for new_row in range(rows[-1] + 1, row_count):
+                new_common = common_mask & masks[new_row]
+                if new_common.bit_count() >= size:
+                    extended.append((rows + (new_row,), new_common))
+        if not extended:
+            break
+        optimum = size
+        frontier = extended
+    return optimum
+
+
+def max_balanced_biclique_full_enumeration(
+    edges: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray] | None:
+    """Unoptimized author-order reference retained for regression controls."""
 
     row_count, column_count = edges.shape
     if row_count == 0 or column_count == 0:
@@ -202,6 +330,50 @@ def max_balanced_biclique(edges: np.ndarray) -> tuple[np.ndarray, np.ndarray] | 
             best_score = int(score)
             best = (rows, columns)
     return best
+
+
+def max_balanced_biclique(edges: np.ndarray) -> tuple[np.ndarray, np.ndarray] | None:
+    """Replicate author order, stopping at the first globally optimal clique."""
+
+    row_count, column_count = edges.shape
+    if row_count == 0 or column_count == 0:
+        return None
+    optimum = balanced_biclique_optimum_score(edges)
+    if optimum == 0:
+        return None
+
+    node_count = row_count + column_count
+    adjacency: dict[int, set[int]] = {
+        node: set() for node in range(node_count)
+    }
+    for left in range(row_count):
+        adjacency[left].update(
+            right for right in range(row_count) if right != left
+        )
+    for left in range(column_count):
+        node = row_count + left
+        adjacency[node].update(
+            row_count + right
+            for right in range(column_count)
+            if right != left
+        )
+    for row in range(row_count):
+        for column in np.flatnonzero(edges[row]):
+            column_node = row_count + int(column)
+            adjacency[row].add(column_node)
+            adjacency[column_node].add(row)
+
+    clique = first_clique_with_balanced_score(
+        adjacency,
+        row_count,
+        optimum,
+    )
+    if clique is not None:
+        values = np.sort(np.array(clique, dtype=int))
+        rows = values[values < row_count]
+        columns = values[values >= row_count] - row_count
+        return rows, columns
+    raise AssertionError("optimum certificate was not attained by clique enumeration")
 
 
 def universal_rank(singular: np.ndarray, rows: int, columns: int) -> int:
@@ -461,7 +633,7 @@ def exhaustive_solver_control() -> dict:
 
 
 def solver_order_control() -> dict:
-    """Show the NetworkX-order solver and lexicographic solver share an objective."""
+    """Require optimized and full author-order enumeration to match exactly."""
 
     random = np.random.default_rng(12345)
     cases = 0
@@ -474,9 +646,23 @@ def solver_order_control() -> dict:
                     continue
                 cases += 1
                 ordered = max_balanced_biclique(edges)
+                full_reference = max_balanced_biclique_full_enumeration(edges)
                 lexicographic = max_balanced_biclique_lexicographic(edges)
-                if ordered is None or lexicographic is None:
+                if (
+                    ordered is None
+                    or full_reference is None
+                    or lexicographic is None
+                ):
                     return {"cases": cases, "passed": False}
+                if not (
+                    np.array_equal(ordered[0], full_reference[0])
+                    and np.array_equal(ordered[1], full_reference[1])
+                ):
+                    return {
+                        "cases": cases,
+                        "exact_author_order_match": False,
+                        "passed": False,
+                    }
                 ordered_score = min(ordered[0].size, ordered[1].size)
                 lexicographic_score = min(
                     lexicographic[0].size, lexicographic[1].size
@@ -492,6 +678,7 @@ def solver_order_control() -> dict:
     return {
         "cases": cases,
         "different_equal_score_choices": tie_differences,
+        "exact_author_order_match": True,
         "passed": True,
     }
 
