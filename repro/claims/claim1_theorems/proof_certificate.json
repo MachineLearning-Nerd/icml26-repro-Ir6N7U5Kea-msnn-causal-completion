@@ -1,0 +1,64 @@
+{
+  "asymptotic_exponents": {
+    "K": "1/4",
+    "algorithm_estimate": "-1/2",
+    "anchor_columns": "1",
+    "anchor_rows": "1",
+    "beta_l1": "0",
+    "beta_l2": "0",
+    "condition_iv_ratio_first_term": "-1/8",
+    "condition_iv_ratio_second_term": "-3/8",
+    "finite_bound_dominant": "-1/8",
+    "normalized_statistic_magnitude": "1/8",
+    "signal_frobenius_squared": "-1",
+    "signal_to_required_energy_ratio": "-3",
+    "tau_1": "-1/2"
+  },
+  "cited_snn_assumption_6": {
+    "anchor": "https://ar5iv.labs.arxiv.org/html/2109.15154#Thmassumption6",
+    "html_sha256": "3ffca53b29d11c708d8332ef53360e7aedc4602ff68ec66cb1e4e12e714f519f",
+    "required_lower_bound": "||E[S^(k)|environment]||_F^2 >= c' |AC^(k)| |AR^(k)|"
+  },
+  "claim_id": "claim_1",
+  "construction": {
+    "K": "N^(1/4), with N=t^4 and t->infinity",
+    "anchor_column_loading": "delta_N=N^-1 for both treatment levels",
+    "anchor_rows_per_subgroup": "u_N=(1,N^-2,...,N^-2)",
+    "algorithm": "Algorithm 2 MSNN with lambda^(k)=rank(E[S_w^(k)])=1",
+    "anchor_treatments": "two levels alternating by column, both with f(d)=1",
+    "noise": "independent Gaussian N(0,sigma^2), fixed sigma>0",
+    "target_column_loading": "1",
+    "target_row_loading": "1"
+  },
+  "exact_identities": {
+    "beta": "u_N/||u_N||_2^2",
+    "beta_l1": "(1+(N-1)N^-2)/(1+(N-1)N^-4)",
+    "beta_l2": "1/sqrt(1+(N-1)N^-4)",
+    "signal_frobenius_squared": "(1+(N-1)N^-4)/N",
+    "target_mean": "1",
+    "tau_1": "sqrt(1+(N-1)N^-4)/sqrt(N)"
+  },
+  "msnn_source": {
+    "assumption_4_3_anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S4.Thmtheorem3",
+    "html_sha256": "f2c8f7a37e8ade697a3ec605688a7a99b84bac4638385e1d1cb7f3dd93d18448",
+    "theorem_4_5_anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S4.Thmtheorem5",
+    "theorem_4_6_anchor": "https://ar5iv.labs.arxiv.org/html/2603.11942#S4.Thmtheorem6",
+    "upper_bound_only": "tau_1^(k)(d) <= c' |MAR^(k)(d)| |MAC^(k)(d)|"
+  },
+  "proof_obligations": {
+    "algorithm_estimate": "Conditional on each observed S, its leading singular vectors are independent of q and x. Their two inner products are O_p(1), while s_1(S)>=||S||_F/sqrt(N)=Omega_p(sqrt(N)); hence each exact rank-one PCR estimate is O_p(N^-1/2), up to an immaterial logarithm uniformly over polynomial K.",
+    "anchor_construction": "Algorithm 3 incidence matrix B is all ones on KN rows by N columns. Its full matrix is a maximum biclique; its rows admit K disjoint size-N partitions and its columns alternate two treatments.",
+    "assumption_2_1": "For both treatments, Y_ij^(d)=u_i v_j^(d)+epsilon_ij^(d) is an exact rank-one factorization.",
+    "assumption_2_2": "The treatment design is deterministic and every noise entry is independent and mean-zero conditional on U, V, and D.",
+    "assumption_2_4": "Every scalar row factor is nonzero, so any nonempty donor set spans every scalar target factor; mu=1 is universal.",
+    "assumption_2_5": "The same scalar row factor is used for both treatments.",
+    "assumption_4_1": "All latent row and column factors have magnitude at most one, so all expected potential outcomes lie in [-1,1].",
+    "assumption_4_2": "Independent fixed-variance Gaussian noise is mean-zero sub-Gaussian with a universal norm constant.",
+    "assumption_4_3": "Rank is one, so tau_r/tau_1=1, and the stated upper bound holds with a universal constant although tau_1 vanishes.",
+    "assumption_4_4": "E[x]=u_N is exactly in Col(E[S_w])=span(u_N), even though Theorem 4.5 omits Assumption 4.4.",
+    "finite_contradiction": "The Theorem 4.5 RHS is O_p(N^-1/4 sqrt(log N)+N^-1/8)->0, while the estimator error converges in probability to -1.",
+    "growth_conditions": "K=N^(1/4)=o(N^20), K->infinity, and both anchor dimensions equal N->infinity.",
+    "normality_contradiction": "All four Theorem 4.6 side conditions hold, but its standardized statistic equals -sqrt(K)/sigma*(1+o_p(1))->-infinity."
+  },
+  "verdict": "FALSIFIED"
+}
