@@ -235,3 +235,11 @@ if __name__ == "__main__":
         "verifier.py",
     )
     subprocess.run([sys.executable, claim_2], check=True)
+    claim_3 = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim3_cor411",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_3], check=True)

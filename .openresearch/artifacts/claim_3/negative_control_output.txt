@@ -1,0 +1,1 @@
+{"checker": "independent_sparse_rich_exponent_checker", "checks": 5, "errors": ["MSNN sparse-to-rich exponent vector mismatch"], "mutation": true, "passed": false}
