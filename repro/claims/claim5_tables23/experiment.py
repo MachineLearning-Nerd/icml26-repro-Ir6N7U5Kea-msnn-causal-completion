@@ -522,8 +522,8 @@ def main() -> int:
         "config": {
             "clique_solver": (
                 "exact NetworkX-compatible author order; independently "
-                "certify the optimum score, prune only branches unable to "
-                "attain it, and stop at the first optimum"
+                "certify the optimum score, exactly certify each remaining "
+                "branch's attainability, and stop at the first optimum"
             ),
             "dgp": "paper Appendix B: absolute value of each ground-truth entry",
             "feasibility_epsilons": [EPSILON, EPSILON],

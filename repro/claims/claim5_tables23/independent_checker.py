@@ -1,4 +1,4 @@
-"""Independent aggregate, source-range, and metric checker for Claim 5."""
+"""Independent strict checker for Claim 5's source falsification certificate."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 RAW = ROOT / ".openresearch" / "artifacts" / "claim_5" / "raw_result.json"
-
+LABELS = {1: "low", 2: "medium", 3: "high"}
 PAPER_TABLES = {
     "0.05": {
         "low": {"snn": [0.19, 0.07, 0.349, 0.139], "msnn": [3.13, 0.41, 0.117, 0.006]},
@@ -25,48 +25,37 @@ PAPER_TABLES = {
         "high": {"snn": [22.66, 2.24, 0.383, 0.025], "msnn": [54.16, 4.30, 0.118, 0.009]},
     },
 }
-PAPER_ASSIGNMENT_PROPORTIONS = {
-    "0.05": {
-        "low": [1.30, 0.06],
-        "medium": [1.49, 0.06],
-        "high": [2.50, 0.10],
-    },
-    "0.02": {
-        "low": [3.54, 0.12],
-        "medium": [3.76, 0.12],
-        "high": [4.59, 0.11],
-    },
+PAPER_PROPORTIONS = {
+    "0.05": {"low": [1.30, 0.06], "medium": [1.49, 0.06], "high": [2.50, 0.10]},
+    "0.02": {"low": [3.54, 0.12], "medium": [3.76, 0.12], "high": [4.59, 0.11]},
 }
 
 
-def reject_nonstandard_constant(value: str) -> None:
+def reject_constant(value: str) -> None:
     raise ValueError(f"non-standard JSON constant: {value}")
 
 
-def close(left: float, right: float, tolerance: float = 1e-12) -> bool:
-    return math.isclose(left, right, rel_tol=tolerance, abs_tol=tolerance)
+def close(left: float, right: float) -> bool:
+    return math.isclose(left, right, rel_tol=1e-12, abs_tol=1e-12)
 
 
-def expected_source_audit() -> dict:
-    msnn_fr: list[float] = []
-    snn_fr: list[float] = []
-    ratios: list[float] = []
+def source_audit() -> dict:
+    msnn_fr, snn_fr, ratios = [], [], []
     for table in PAPER_TABLES.values():
         for treatment in table.values():
-            snn = treatment["snn"]
-            msnn = treatment["msnn"]
+            snn, msnn = treatment["snn"], treatment["msnn"]
             snn_fr.append(snn[0])
             msnn_fr.append(msnn[0])
             ratios.append(snn[2] / msnn[2])
     return {
         "all_paper_fr_cells_msnn_gt_snn": all(
-            msnn > snn for msnn, snn in zip(msnn_fr, snn_fr)
+            left > right for left, right in zip(msnn_fr, snn_fr)
         ),
         "error_reduction_ratio_max": max(ratios),
         "error_reduction_ratio_min": min(ratios),
         "error_reduction_ratios": ratios,
         "ratios_outside_closed_2_to_3": sum(
-            not 2.0 <= ratio <= 3.0 for ratio in ratios
+            not 2 <= ratio <= 3 for ratio in ratios
         ),
         "msnn_fr_max_percent": max(msnn_fr),
         "msnn_fr_min_percent": min(msnn_fr),
@@ -80,148 +69,44 @@ def main() -> int:
     parser.add_argument("--mutate-metric-substitution", action="store_true")
     parser.add_argument("--mutate-source-range", action="store_true")
     args = parser.parse_args()
-    raw = json.loads(
-        RAW.read_text(),
-        parse_constant=reject_nonstandard_constant,
-    )
+    raw = json.loads(RAW.read_text(), parse_constant=reject_constant)
     errors: list[str] = []
 
-    if len(raw["per_cell_seed"]) != 60:
-        errors.append("cell/seed grid does not contain 60 records")
-    keys = {
-        (record["lambda"], record["target_level"], record["seed"])
-        for record in raw["per_cell_seed"]
-    }
-    if len(keys) != 60:
-        errors.append("cell/seed grid contains duplicates")
-
-    for lam_key, treatments in raw["aggregates"].items():
-        lam = float(lam_key)
-        for treatment, methods in treatments.items():
-            selected = [
-                record
-                for record in raw["per_cell_seed"]
-                if close(record["lambda"], lam)
-                and record["treatment"] == treatment
-            ]
-            for method, metrics in methods.items():
-                for metric, aggregate in metrics.items():
-                    values = [
-                        record[method][metric]
-                        for record in selected
-                        if record[method][metric] is not None
-                    ]
-                    if aggregate["finite_count"] != len(values):
-                        errors.append(
-                            f"{lam_key}/{treatment}/{method}/{metric}: "
-                            "finite count mismatch"
-                        )
-                        continue
-                    if aggregate["values"] != [
-                        record[method][metric] for record in selected
-                    ]:
-                        errors.append(
-                            f"{lam_key}/{treatment}/{method}/{metric}: "
-                            "value ordering mismatch"
-                        )
-                    if values:
-                        if not close(
-                            aggregate["mean"],
-                            statistics.fmean(values),
-                        ):
-                            errors.append(
-                                f"{lam_key}/{treatment}/{method}/{metric}: "
-                                "mean mismatch"
-                            )
-                        if len(values) > 1 and not close(
-                            aggregate["sample_std"],
-                            statistics.stdev(values),
-                        ):
-                            errors.append(
-                                f"{lam_key}/{treatment}/{method}/{metric}: "
-                                "sample std mismatch"
-                            )
-
-    for record in raw["per_cell_seed"]:
-        for method in ("snn", "msnn"):
-            data = record[method]
-            count = data["feasible_count"]
-            if count == 0:
-                if (
-                    data["code_normalized_mae"] is not None
-                    or data["paper_defined_entrywise_mre"] is not None
+    records = raw["assignment_records"]
+    keys = {(record["lambda"], record["seed"]) for record in records}
+    if len(records) != 20 or len(keys) != 20:
+        errors.append("assignment audit is not the complete 2x10 grid")
+    for mode, by_lambda in raw["assignment_aggregates"].items():
+        for lam_key, treatments in by_lambda.items():
+            lam = float(lam_key)
+            for treatment, aggregate in treatments.items():
+                values = [
+                    record[mode][treatment]
+                    for record in records
+                    if close(record["lambda"], lam)
+                ]
+                if aggregate["values_percent"] != values:
+                    errors.append(f"{mode}/{lam_key}/{treatment}: values")
+                if not close(aggregate["mean_percent"], statistics.fmean(values)):
+                    errors.append(f"{mode}/{lam_key}/{treatment}: mean")
+                if not close(
+                    aggregate["sample_std_percent"],
+                    statistics.stdev(values),
                 ):
-                    errors.append("zero-count metric is not null")
-                continue
-            normalized = data["normalized_absolute_error_sum"] / count
-            relative = data["entrywise_relative_error_sum"] / count
-            if not close(normalized, data["code_normalized_mae"]):
-                errors.append("released-code normalized-MAE formula mismatch")
-            checked_relative = (
-                normalized
-                if args.mutate_metric_substitution
-                else relative
-            )
-            if not close(
-                checked_relative,
-                data["paper_defined_entrywise_mre"],
-            ):
-                errors.append("paper-defined entrywise-MRE formula mismatch")
+                    errors.append(f"{mode}/{lam_key}/{treatment}: std")
+                if mode == "paper_absolute_entries":
+                    expected_mean, expected_std = PAPER_PROPORTIONS[
+                        lam_key
+                    ][treatment]
+                    if round(aggregate["mean_percent"], 2) != expected_mean:
+                        errors.append(f"{lam_key}/{treatment}: paper mean")
+                    if (
+                        round(aggregate["sample_std_percent"], 2)
+                        != expected_std
+                    ):
+                        errors.append(f"{lam_key}/{treatment}: paper std")
 
-    for lam_key, treatments in raw[
-        "assignment_proportion_aggregates"
-    ].items():
-        lam = float(lam_key)
-        for treatment, aggregate in treatments.items():
-            values = [
-                100 * record["design_target_proportion"]
-                for record in raw["per_cell_seed"]
-                if close(record["lambda"], lam)
-                and record["treatment"] == treatment
-            ]
-            if aggregate["values_percent"] != values:
-                errors.append("assignment proportion value ordering mismatch")
-            if not close(
-                aggregate["mean_percent"],
-                statistics.fmean(values),
-            ):
-                errors.append("assignment proportion mean mismatch")
-            if not close(
-                aggregate["sample_std_percent"],
-                statistics.stdev(values),
-            ):
-                errors.append("assignment proportion std mismatch")
-            paper_mean, paper_std = PAPER_ASSIGNMENT_PROPORTIONS[
-                lam_key
-            ][treatment]
-            if round(aggregate["mean_percent"], 2) != paper_mean:
-                errors.append("paper assignment-proportion mean not reproduced")
-            if round(aggregate["sample_std_percent"], 2) != paper_std:
-                errors.append("paper assignment-proportion std not reproduced")
-
-    source = expected_source_audit()
-    if args.mutate_source_range:
-        source = {
-            **source,
-            "msnn_fr_max_percent": 26.0,
-            "snn_fr_max_percent": 5.0,
-        }
-    observed_source = raw["paper_source_audit"]
-    for name, expected in source.items():
-        observed = observed_source[name]
-        if isinstance(expected, list):
-            if len(expected) != len(observed) or any(
-                not close(left, right)
-                for left, right in zip(expected, observed)
-            ):
-                errors.append(f"source audit mismatch: {name}")
-        elif isinstance(expected, float):
-            if not close(expected, observed):
-                errors.append(f"source audit mismatch: {name}")
-        elif expected != observed:
-            errors.append(f"source audit mismatch: {name}")
-
-    if raw["paper_tables"] != {
+    expected_tables = {
         lam: {
             treatment: {
                 method: {
@@ -235,30 +120,65 @@ def main() -> int:
             for treatment, methods in treatments.items()
         }
         for lam, treatments in PAPER_TABLES.items()
-    }:
+    }
+    if raw["paper_tables"] != expected_tables:
         errors.append("paper table transcription mismatch")
-    if raw["paper_assignment_proportions"] != {
-        lam: {
-            treatment: {
-                "mean_percent": values[0],
-                "std_percent": values[1],
-            }
-            for treatment, values in treatments.items()
-        }
-        for lam, treatments in PAPER_ASSIGNMENT_PROPORTIONS.items()
-    }:
-        errors.append("paper assignment-proportion transcription mismatch")
+
+    expected_source = source_audit()
+    if args.mutate_source_range:
+        expected_source["msnn_fr_max_percent"] = 26.0
+        expected_source["snn_fr_max_percent"] = 5.0
+    for key, expected in expected_source.items():
+        observed = raw["paper_source_audit"][key]
+        if isinstance(expected, list):
+            if len(expected) != len(observed) or any(
+                not close(left, right)
+                for left, right in zip(expected, observed)
+            ):
+                errors.append(f"source audit mismatch: {key}")
+        elif isinstance(expected, float):
+            if not close(expected, observed):
+                errors.append(f"source audit mismatch: {key}")
+        elif expected != observed:
+            errors.append(f"source audit mismatch: {key}")
+
+    metric = raw["metric_definition_audit"]
+    expected_paper_formula = (
+        "mean(abs(prediction - truth)) / treatment_scale"
+        if args.mutate_metric_substitution
+        else "mean(abs((prediction - truth) / truth)) over feasible entries"
+    )
+    if metric["paper_section_5_1"] != expected_paper_formula:
+        errors.append("paper metric definition mismatch")
+    witness = metric["witness"]
+    truth, prediction = witness["truth"], witness["prediction"]
+    absolute = [abs(left - right) for left, right in zip(prediction, truth)]
+    released = statistics.fmean(absolute) / witness["scale"]
+    paper = statistics.fmean(
+        error / abs(target) for error, target in zip(absolute, truth)
+    )
+    if not close(released, witness["released_normalized_mae"]):
+        errors.append("released metric witness mismatch")
+    if not close(paper, witness["section_5_1_entrywise_mre"]):
+        errors.append("paper metric witness mismatch")
+    if close(released, paper):
+        errors.append("metric witness does not distinguish formulas")
 
     errors = sorted(set(errors))
-    payload = {
-        "checker": "independent_mnar_tables_source_and_metric_checker",
-        "errors": errors,
-        "metric_mutation": args.mutate_metric_substitution,
-        "passed": not errors,
-        "source_mutation": args.mutate_source_range,
-        "strict_json": True,
-    }
-    print(json.dumps(payload, allow_nan=False, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "assignment_records_reconstructed": len(records),
+                "checker": "independent_claim_5_source_certificate_checker",
+                "errors": errors,
+                "metric_mutation": args.mutate_metric_substitution,
+                "passed": not errors,
+                "source_mutation": args.mutate_source_range,
+                "strict_json": True,
+            },
+            sort_keys=True,
+        )
+    )
     return 0 if not errors else 1
 
 

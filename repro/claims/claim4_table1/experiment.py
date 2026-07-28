@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import itertools
 import json
+import math
 import os
 import platform
 import subprocess
@@ -164,6 +165,62 @@ def networkx_compatible_find_cliques(
         return
 
 
+def branch_can_attain_balanced_score(
+    candidates: set[int],
+    adjacency: dict[int, set[int]],
+    row_count: int,
+    current_rows: int,
+    current_columns: int,
+    target_score: int,
+) -> bool:
+    """Exactly decide whether a clique branch can attain ``target_score``."""
+
+    candidate_rows = sorted(
+        node for node in candidates if node < row_count
+    )
+    candidate_columns = sorted(
+        node for node in candidates if node >= row_count
+    )
+    required_rows = max(0, target_score - current_rows)
+    required_columns = max(0, target_score - current_columns)
+    if (
+        len(candidate_rows) < required_rows
+        or len(candidate_columns) < required_columns
+    ):
+        return False
+    if required_rows == 0 or required_columns == 0:
+        return True
+
+    row_search_size = math.comb(len(candidate_rows), required_rows)
+    column_search_size = math.comb(
+        len(candidate_columns),
+        required_columns,
+    )
+    if row_search_size <= column_search_size:
+        column_set = set(candidate_columns)
+        for rows in itertools.combinations(
+            candidate_rows,
+            required_rows,
+        ):
+            common_columns = column_set.copy()
+            for row in rows:
+                common_columns.intersection_update(adjacency[row])
+            if len(common_columns) >= required_columns:
+                return True
+    else:
+        row_set = set(candidate_rows)
+        for columns in itertools.combinations(
+            candidate_columns,
+            required_columns,
+        ):
+            common_rows = row_set.copy()
+            for column in columns:
+                common_rows.intersection_update(adjacency[column])
+            if len(common_rows) >= required_rows:
+                return True
+    return False
+
+
 def first_clique_with_balanced_score(
     adjacency: dict[int, set[int]],
     row_count: int,
@@ -220,15 +277,13 @@ def first_clique_with_balanced_score(
                             for value in clique
                         )
                         current_columns = len(clique) - current_rows
-                        possible_rows = current_rows + sum(
-                            node < row_count for node in child_candidates
-                        )
-                        possible_columns = current_columns + sum(
-                            node >= row_count for node in child_candidates
-                        )
-                        if (
-                            min(possible_rows, possible_columns)
-                            >= target_score
+                        if branch_can_attain_balanced_score(
+                            child_candidates,
+                            adjacency,
+                            row_count,
+                            current_rows,
+                            current_columns,
+                            target_score,
                         ):
                             stack.append(
                                 (subgraph, candidates, extensions)

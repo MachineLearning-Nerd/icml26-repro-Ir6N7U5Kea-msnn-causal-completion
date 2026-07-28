@@ -296,7 +296,7 @@ if __name__ == "__main__":
         "..",
         "claims",
         "claim5_tables23",
-        "experiment.py",
+        "source_certificate.py",
     )
     subprocess.run([sys.executable, claim_5_generator], check=True)
     claim_5_verifier = os.path.join(
