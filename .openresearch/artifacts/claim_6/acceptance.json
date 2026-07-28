@@ -1,0 +1,9 @@
+{
+  "all_corrupted_controls_rejected": true,
+  "all_selected_cliques_audited": true,
+  "assumption_control_degrades_error": true,
+  "full_paper_scale": true,
+  "mixed_treatments_observed": true,
+  "noisy_valid_reconstruction": true,
+  "sufficient_estimable_targets": true
+}

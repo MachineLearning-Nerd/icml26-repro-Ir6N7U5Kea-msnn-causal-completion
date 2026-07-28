@@ -1,0 +1,14 @@
+{
+  "claim_id": "claim_6_generator",
+  "statement": "Algorithms 2-3 construct mixed anchor rows and columns as a bipartite clique satisfying D_ab=D_ib=d(b)!=0 and D_aj=d; under shared latent row factors the weighted noisy reconstruction remains accurate.",
+  "scope": "K=1, low treatment d=1, ten 300x100 rank-3 MCAR matrices, relative Gaussian noise sigma=0.001, 40 target entries per seed",
+  "acceptance": [
+    "audit every selected edge and target-row treatment invariant",
+    "observe at least one selected clique spanning multiple treatment levels",
+    "reject every one-edge corruption",
+    "obtain at least 100 rank-3 estimable targets",
+    "valid shared-factor scaled MAE below 0.05",
+    "Assumption 2.5 violation increases scaled MAE by more than 5x"
+  ],
+  "provisional": "This generator run emits raw evidence; a child must freeze the raw JSON and add an independent checker before a final verdict."
+}

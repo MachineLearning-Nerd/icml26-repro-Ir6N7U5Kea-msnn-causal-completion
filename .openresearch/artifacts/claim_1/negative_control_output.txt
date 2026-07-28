@@ -1,0 +1,9 @@
+{
+  "checker": "independent_claim_1_counterexample_checker",
+  "errors": [
+    "signal_frobenius_squared exponent mismatch: derived -1, declared 2"
+  ],
+  "mutation": true,
+  "passed": false,
+  "strict_json": true
+}

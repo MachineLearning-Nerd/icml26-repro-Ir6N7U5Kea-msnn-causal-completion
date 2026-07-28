@@ -226,3 +226,84 @@ def main():
 
 if __name__ == "__main__":
     main()
+    import subprocess
+    claim_2 = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim2_cor410",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_2], check=True)
+    claim_3 = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim3_cor411",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_3], check=True)
+    claim_6_generator = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim6_algorithm",
+        "experiment.py",
+    )
+    subprocess.run([sys.executable, claim_6_generator], check=True)
+    claim_6_verifier = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim6_algorithm",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_6_verifier], check=True)
+    claim_4_generator = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim4_table1",
+        "experiment.py",
+    )
+    subprocess.run([sys.executable, claim_4_generator], check=True)
+    claim_4_verifier = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim4_table1",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_4_verifier], check=True)
+    claim_1_generator = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim1_theorems",
+        "experiment.py",
+    )
+    subprocess.run([sys.executable, claim_1_generator], check=True)
+    claim_1_verifier = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim1_theorems",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_1_verifier], check=True)
+    claim_5_generator = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim5_tables23",
+        "source_certificate.py",
+    )
+    subprocess.run([sys.executable, claim_5_generator], check=True)
+    claim_5_verifier = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "claims",
+        "claim5_tables23",
+        "verifier.py",
+    )
+    subprocess.run([sys.executable, claim_5_verifier], check=True)

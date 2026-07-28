@@ -1,0 +1,15 @@
+{
+  "acceptance": {
+    "author_code_metric_rounds_to_table": true,
+    "fixed_protocol": true,
+    "independent_checker_passes": true,
+    "metric_substitution_control_exits_nonzero": true,
+    "paper_formula_metric_is_computed": true,
+    "strict_json": true
+  },
+  "claim_id": "claim_4",
+  "exact_claim": "On MCAR-generated data at p(d)=0.01, MSNN has FR 4.69% and MRE 0.0391, versus SNN FR 0.03% and MRE 0.806 (Table 1).",
+  "falsification_rule": "The claim is a conjunction. It is FALSIFIED if the paper-scale protocol reproduces the value labeled MRE only under the released code's normalized-MAE formula while the paper's explicit per-entry relative-error formula yields a materially different value.",
+  "non_circularity": "Dimensions, seeds, DGP, treatment probabilities, algorithm, rank rule, feasibility thresholds, and both metric formulas were fixed from the paper and pinned author source before results were inspected.",
+  "verdict": "FALSIFIED"
+}

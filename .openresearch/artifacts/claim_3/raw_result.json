@@ -1,0 +1,9 @@
+{
+  "claim_id": "claim_3",
+  "exact_exponents": {
+    "msnn_sparse_to_rich": "r",
+    "snn_sparse_to_rich": "r*c+r+c"
+  },
+  "negative_control_exit_code": 1,
+  "verdict": "VERIFIED"
+}

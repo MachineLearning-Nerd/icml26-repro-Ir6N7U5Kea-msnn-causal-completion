@@ -1,0 +1,7 @@
+{
+  "claim_id": "claim_4_generator",
+  "exact_claim": "At MCAR p(d)=0.01, Table 1 reports MSNN FR 4.69% +/- 1.11 and MRE 0.0391 +/- 0.0109, versus SNN FR 0.03% +/- 0.00 and MRE 0.806 +/- 0.240.",
+  "protocol": "Author-code-equivalent low-treatment computation over all 30000 entries for each released seed 0-9.",
+  "non_circularity": "No simulation size, seed, feasibility tolerance, algorithm parameter, metric, or acceptance threshold was selected from the reported result. They are taken from the paper or pinned author source.",
+  "provisional": "This node generates raw evidence. A descendant must freeze it, independently check it, quantify agreement without answer-derived tolerances, and assign VERIFIED/FALSIFIED/BLOCKED."
+}

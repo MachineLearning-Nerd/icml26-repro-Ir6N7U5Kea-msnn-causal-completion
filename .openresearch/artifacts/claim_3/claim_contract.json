@@ -1,0 +1,23 @@
+{
+  "claim_id": "claim_3",
+  "paper_location": {
+    "anchor": "S4.Thmtheorem11",
+    "section": "4.3.1",
+    "title": "Corollary 4.11"
+  },
+  "statement": "Under Theorem 4.8, E[K_SNN(d)]/E[K_MSNN(d_max)] = O(gamma^(-c)*(p_d/p_max)^(rc+r+c)) while E[K_MSNN(d)]/E[K_MSNN(d_max)] = O((p_d/p_max)^r).",
+  "quantifiers": [
+    "any entry (i,j)",
+    "any treatment d with p_d > 0",
+    "d_max is a treatment attaining p_max",
+    "fixed positive integer anchor sizes r and c",
+    "MCAR assignments satisfying both sparsity limits in Theorem 4.8"
+  ],
+  "acceptance": [
+    "derive both sparse-to-rich exponent vectors exactly from Theorem 4.8",
+    "independent checker reproduces both derivations and exact-rational substitutions",
+    "checker rejects a mutated MSNN sparse exponent with nonzero exit status",
+    "report the paper's exact exponents rather than only the quadratic/linear paraphrase"
+  ],
+  "verdict_rule": "VERIFIED only if every acceptance condition passes; otherwise verifier exits nonzero"
+}

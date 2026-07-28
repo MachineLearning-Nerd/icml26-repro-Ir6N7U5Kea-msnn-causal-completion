@@ -1,0 +1,32 @@
+{
+  "claim_id": "claim_6_generator",
+  "config": {
+    "m": 300,
+    "n": 100,
+    "noise_sigma_relative": 0.001,
+    "rank": 3,
+    "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "target_treatment": 1,
+    "targets_per_seed": 40
+  },
+  "controls_rejected": 382,
+  "estimable_targets": 215,
+  "invalid_shared_factor_scaled_mae": 2.232891350152812,
+  "invariant_checks": 382,
+  "mixed_clique_fraction": 0.06806282722513089,
+  "mixed_cliques": 26,
+  "per_seed": [
+    {"cliques": 38, "controls_rejected": 38, "estimable": 22, "invariant_checks": 38, "max_candidate_rows": 8, "mixed_cliques": 1, "seed": 0, "targets": 40},
+    {"cliques": 35, "controls_rejected": 35, "estimable": 21, "invariant_checks": 35, "max_candidate_rows": 9, "mixed_cliques": 2, "seed": 1, "targets": 40},
+    {"cliques": 40, "controls_rejected": 40, "estimable": 25, "invariant_checks": 40, "max_candidate_rows": 7, "mixed_cliques": 1, "seed": 2, "targets": 40},
+    {"cliques": 38, "controls_rejected": 38, "estimable": 27, "invariant_checks": 38, "max_candidate_rows": 6, "mixed_cliques": 3, "seed": 3, "targets": 40},
+    {"cliques": 39, "controls_rejected": 39, "estimable": 21, "invariant_checks": 39, "max_candidate_rows": 8, "mixed_cliques": 3, "seed": 4, "targets": 40},
+    {"cliques": 39, "controls_rejected": 39, "estimable": 25, "invariant_checks": 39, "max_candidate_rows": 8, "mixed_cliques": 3, "seed": 5, "targets": 40},
+    {"cliques": 38, "controls_rejected": 38, "estimable": 18, "invariant_checks": 38, "max_candidate_rows": 7, "mixed_cliques": 3, "seed": 6, "targets": 40},
+    {"cliques": 40, "controls_rejected": 40, "estimable": 20, "invariant_checks": 40, "max_candidate_rows": 8, "mixed_cliques": 4, "seed": 7, "targets": 40},
+    {"cliques": 35, "controls_rejected": 35, "estimable": 16, "invariant_checks": 35, "max_candidate_rows": 10, "mixed_cliques": 5, "seed": 8, "targets": 40},
+    {"cliques": 40, "controls_rejected": 40, "estimable": 20, "invariant_checks": 40, "max_candidate_rows": 6, "mixed_cliques": 1, "seed": 9, "targets": 40}
+  ],
+  "selected_cliques": 382,
+  "valid_shared_factor_scaled_mae": 0.0034974356410245326
+}

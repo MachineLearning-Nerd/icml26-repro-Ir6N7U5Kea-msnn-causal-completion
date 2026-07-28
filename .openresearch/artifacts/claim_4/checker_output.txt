@@ -1,0 +1,1 @@
+{"checker": "independent_aggregate_and_metric_semantics", "errors": [], "mutation": false, "passed": true, "strict_json": true}

@@ -1,0 +1,9 @@
+{
+  "assignment_records_reconstructed": 20,
+  "checker": "independent_claim_5_source_certificate_checker",
+  "errors": [],
+  "metric_mutation": false,
+  "passed": true,
+  "source_mutation": false,
+  "strict_json": true
+}

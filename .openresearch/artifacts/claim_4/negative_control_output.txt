@@ -1,0 +1,3 @@
+{"checker": "independent_aggregate_and_metric_semantics", "errors": ["metric substitution: normalized MAE is not paper-defined MRE", "paper-defined MRE incorrectly matches the table label"], "mutation": true, "passed": false, "strict_json": true}
+
+Exit code: 1 (expected).

@@ -1,0 +1,7 @@
+{
+  "checker": "independent_claim_1_counterexample_checker",
+  "errors": [],
+  "mutation": false,
+  "passed": true,
+  "strict_json": true
+}
