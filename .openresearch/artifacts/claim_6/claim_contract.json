@@ -1,0 +1,14 @@
+{
+  "claim_id": "claim_6",
+  "paper_statement": "Mixed anchor rows and columns are constructed as bipartite cliques spanning multiple treatment levels while preserving the target row's same-treatment data, relying on shared latent row factors.",
+  "scope": "K=1; target treatment probability 0.01; ten 300x100 rank-3 MCAR matrices; relative Gaussian noise 0.001; 40 deterministic targets per seed",
+  "required_checks": [
+    "Every selected Algorithm 3 edge satisfies D_ab=D_ib!=0 and D_aj=d.",
+    "At least one selected clique contains more than one treatment level.",
+    "The Algorithm 2 estimator is evaluated with paper-scale noisy data.",
+    "A paired violation of Assumption 2.5 increases scaled MAE by more than 5x.",
+    "A one-edge corruption and an incidence mutation are rejected.",
+    "An independently implemented checker regenerates all ten seeds and matches the frozen result."
+  ],
+  "verdict_rule": "VERIFIED iff every required check passes; otherwise the verifier exits nonzero."
+}

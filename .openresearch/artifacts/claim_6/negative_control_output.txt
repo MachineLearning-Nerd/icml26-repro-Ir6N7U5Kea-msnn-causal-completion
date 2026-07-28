@@ -1,0 +1,3 @@
+Command suffix: `--mutate-target-treatment`
+Exit code: 1
+CLAIM_6_NEGATIVE_CONTROL={"checker": "independent_full_seed_reconstruction", "errors": ["selected row does not preserve target treatment"], "mutation": true, "passed": false, "seeds_reconstructed": 10, "targets_reconstructed": 400}

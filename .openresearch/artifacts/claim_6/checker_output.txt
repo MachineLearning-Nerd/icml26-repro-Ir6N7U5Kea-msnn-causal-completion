@@ -1,0 +1,1 @@
+CLAIM_6_CHECKER={"checker": "independent_full_seed_reconstruction", "errors": [], "mutation": false, "passed": true, "seeds_reconstructed": 10, "targets_reconstructed": 400}
